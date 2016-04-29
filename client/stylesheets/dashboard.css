@@ -1,0 +1,290 @@
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 64px;
+  font-family: "微软雅黑";
+}
+a:hover {
+  text-decoration: none;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+  border: 0;
+  min-height: 64px;
+}
+
+.nav .head-img {
+  padding: 10px 15px;
+}
+
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+  color: #666;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+
+.left-nav-logo {
+  margin-right: 8px;
+}
+.left-nav2 > a {
+  padding-left: 56px !important;
+  color: #666;
+}
+.left-nav2 > a.active {
+  color: #428bca;
+  background-color: #eee;
+}
+
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+
+/*
+ * home page
+ */
+div#home-page .row div {
+  margin: 24px 0;
+}
+div#home-page .row a {
+  display: block;
+  padding: 24px 0;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+}
+div#home-page div.home-fast a {
+  color: #666;
+  background-color: #f5f5f5;
+}
+
+
+/*
+ * weather page
+ */
+
+
+/*
+ * weather page header
+ */
+.pageheader {
+  background-color: #666;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: #fff;
+}
+.online-circle {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #8BC34A;
+  border-radius: 8px;
+}
+
+.offline-circle {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #F44336;
+  border-radius: 8px;
+}
+.isonline {
+  display: inline-block;
+}
+
+/*
+ * weather page navs
+ */
+ul.nav-justified {
+  background-color: #f5f5f5;
+}
+.nav-justified > li > a {
+  color: #999;
+}
+.nav-justified > li > a:hover {
+  color: #666;
+  background-color: transparent;
+}
+.nav-pills > li.weather-active > a, 
+.nav-pills > li.weather-active > a:hover, 
+.nav-pills > li.weather-active > a:focus {
+  background-color: transparent;
+  color: #fe895e;
+}
+
+
+/*
+ * weather page daily
+ */
+.pagedaily0{
+  background-image: url(/img/weather/weather_bg_暴雨.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily1{
+  background-image: url(/img/weather/weather_bg_大雪.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily2{
+  background-image: url(/img/weather/weather_bg_大雨.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily3{
+  background-image: url(/img/weather/weather_bg_多云.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily4{
+  background-image: url(/img/weather/weather_bg_晴.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily5{
+  background-image: url(/img/weather/weather_bg_沙尘.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily6{
+  background-image: url(/img/weather/weather_bg_未知.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily7{
+  background-image: url(/img/weather/weather_bg_雾.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily8{
+  background-image: url(/img/weather/weather_bg_小雪.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily9{
+  background-image: url(/img/weather/weather_bg_小雨.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily10{
+  background-image: url(/img/weather/weather_bg_阴.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily11{
+  background-image: url(/img/weather/weather_bg_中雪.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+.pagedaily12{
+  background-image: url(/img/weather/weather_bg_中雨.png);
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+
+.rowdaily {
+  text-align: center;
+  color: #FFFFFF;
+}
+.weatherpic {
+  width: 60%;
+  height: 60%;
+}
+.pm25 {
+  text-align: center;
+  padding: 16px;
+  margin: 32px;
+}
+
+
+.headpic{
+  width: 75px;
+}
+
