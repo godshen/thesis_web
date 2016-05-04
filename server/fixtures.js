@@ -1,4 +1,6 @@
 if (Meteor.isServer) {
+	console.log('begin this project');
+	
 	function saveDevices (data) {
 		var db_data = Devices.find(data._id).fetch();
 		if (db_data.length) {
@@ -14,10 +16,10 @@ if (Meteor.isServer) {
 		//console.log(db_data);
 		if (db_data.length) {
 			Weathers.update(data._id, data);
-			console.log('device updated');
+			console.log('weather updated');
 		} else {
 			Weathers.insert(data);
-			console.log('device inserted');
+			console.log('weather inserted');
 		}
 	};
 	function fetchLocation (device_item) {
