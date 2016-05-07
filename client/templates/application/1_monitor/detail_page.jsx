@@ -1,4 +1,4 @@
-WeatherPage = React.createClass({
+DetailPage = React.createClass({
   // This mixin makes the getMeteorData method work
   mixins: [ReactMeteorData],
 
@@ -13,20 +13,7 @@ WeatherPage = React.createClass({
 
   getInitialState() {
     return {
-      currentMessage: {},
-      historyMessages: [],
-      activeNav: 'temperature'
     }
-  },
-
-  _changeNav(activeNav) {
-    this.setState({
-      activeNav: activeNav
-    });
-    clearInterval(this.timer);
-    this.timer = setInterval(function() {
-      this._showChart(activeNav);
-    }.bind(this), 3000);
   },
 
   _mqttClient() {
@@ -48,52 +35,6 @@ WeatherPage = React.createClass({
 
   },
 
-  _getChartData(current_chart) {
-    var history_msg = this.state.historyMessages;
-    var chart_data = [];
-    for (var i = 0; i < history_msg.length; i++) {
-      var data_item = history_msg[i][current_chart];
-      chart_data.push(data_item);
-    };
-    return chart_data;
-  },
-
-  _showChart(current_chart) {
-    var chart_data = this._getChartData(current_chart);
-    var chart_container = this.refs.chart;
-    $(chart_container).highcharts({
-        chart: {
-            backgroundColor: '#f5f5f5',
-            type: 'line'
-        },
-        colors: ['#fe895e'],
-        title: {
-            text: '',
-            x: -20 //center
-        },
-        xAxis: {
-            categories: []
-        },
-        yAxis: {
-            title: {
-              text: null
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        legend: {
-            enabled: false
-        },
-        series: [{
-            name: '',
-            data: chart_data
-        }]
-    });
-  },
-
   componentDidMount() {
     this._mqttClient();
     var client = this.mqttClient;
@@ -104,14 +45,6 @@ WeatherPage = React.createClass({
         console.log("connected: "+device_id);
         client.subscribe(device_id + "/out/read");
     };
-
-    var history_msg_str = localStorage.getItem(this.props.currentDevice.id);
-    var history_msg = JSON.parse(history_msg_str);
-
-    var current_chart = this.state.activeNav;
-    this.timer = setInterval(function() {
-      this._showChart(current_chart);
-    }.bind(this), 3000);
   },
 
   componentWillUnmount() {
@@ -121,7 +54,6 @@ WeatherPage = React.createClass({
     } catch(e) {
       console.log(e);
     }
-    clearInterval(this.timer);
   },
 
   render() {

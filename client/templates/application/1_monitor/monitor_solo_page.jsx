@@ -41,7 +41,7 @@ Device = React.createClass({
   // },
 
   _changePage() {
-  	this.props.changePage('weather', this.props.device);
+  	this.props.changePage('details', this.props.device);
   },
 
   render() {

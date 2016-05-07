@@ -32,17 +32,10 @@ Content = React.createClass({
           </div>
         );
         break;
-      case 'monitor_cunstom':
+      case 'details':
         return (
           <div className="container-fluid">
-            <MonitorCustomPage changePage={this.props.changePage} />
-          </div>
-        );
-        break;
-      case 'weather':
-        return (
-          <div className="container-fluid">
-            <WeatherPage changePage={this.props.changePage} currentDevice={this.props.currentDevice} />
+            <DetailPage changePage={this.props.changePage} currentDevice={this.props.currentDevice} />
           </div>
         );
         break;

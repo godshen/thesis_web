@@ -2,7 +2,7 @@ LeftNav = React.createClass({
   getNavs() {
     return [
       { name: 'monitor', text: "订单详情", content: [
-        { name: 'monitor_center', text: "配送监控"},
+        { name: 'monitor_center', text: "下单界面"},
         { name: 'monitor_solo', text: "进度查询"},
         { name: 'monitor_group', text: "小区监控"}
       ] },
