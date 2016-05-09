@@ -28,7 +28,7 @@ DetailPage = React.createClass({
 
   _onMessageArrived(message) {
     var msg = JSON.parse(message.payloadString);
-    console.log(msg);
+    msg = msg[0];
     if(msg[15]) console.log(msg[15]);
     if(msg[17]) {console.log(msg[17]);document.getElementById("temp_test").innerHTML="温度"+msg[17];}
     if(msg[19]) {console.log(msg[19]);document.getElementById("humi_test").innerHTML="湿度"+msg[19];}
@@ -43,7 +43,7 @@ DetailPage = React.createClass({
     function onConnect() {
         // Once a connection has been made, make a subscription and send a message.
         console.log("connected: "+device_id);
-        client.subscribe(device_id + "/out/read");
+        client.subscribe(device_id + "/out");
     };
   },
 
