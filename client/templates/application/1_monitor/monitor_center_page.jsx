@@ -1,10 +1,22 @@
   MonitorCenterPage = React.createClass({
 
+
+ 	// This mixin makes the getMeteorData method work
+	mixins: [ReactMeteorData],
+
+	// Loads items from the Devices collection and puts them on this.data.devices
+	getMeteorData() {
+		let query = {};
+		return {
+			orders: Orders.find(query).fetch()
+		};
+	},
+
   getInitialState() {
     return {
-      pay_id: '1',
-      shipment_id: '1',
-      best_time: '1'
+      pay_id: 1,
+      shipment_id: 1,
+      best_time: 1
     }
   },
 
@@ -46,9 +58,9 @@
         hasGiftcard:false,
         totalPrice:244.00,
         postage:10,//运费
-        postFree:true,//活动是否免邮了
-        bcPrice:150,//计算界值
-        activityDiscountMoney:0.00,//活动优惠
+        postFree:true,
+        bcPrice:150,
+        activityDiscountMoney:0.00,
         showCouponBox:0,
         invoice:{
             NA:"0",
@@ -60,16 +72,52 @@
     var miniCartDisable=true;
   },
 
+  _toOrder(){
+  	var cartBuff =[
+		  	"c28a7d8b/d0bae4064b24",
+		  	"c28a7d8b/abcdwxyz0123",
+		  	"c28a7d8b/abcdwxyz0124",
+		  	"c28a7d8b/abcdwxyz0125"
+  		];
+  	var lng = document.getElementById("mapJD").innerText.split(':');
+  	var lat = document.getElementById("mapWD").innerText.split(':');
+  	if(lng.length==2 && lat.length==2){
+  		var testOrder = {"cart":"","lng":0,"lat":0};
+  		testOrder.cart = cartBuff[this.state.shipment_id];
+	  	testOrder.lng = parseFloat(lng[1]);
+	  	testOrder.lat = parseFloat(lat[1]);
+	  	testOrder._id = "xxx4321_"+this.state.shipment_id;
+		var db_data = Orders.find(testOrder._id).fetch();
+		if (db_data.length) {
+			Orders.update(testOrder._id, testOrder);
+		} else {
+			Orders.insert(testOrder);
+		}
+  	}
+  	else{
+  		alert("请选择地址");
+  	}
+  	
+  },
+
   componentDidMount() {
     this._InitialData();
+
+    var map = new BMap.Map("selectContainer");
+	var point = new BMap.Point(121.222, 31.058);
+	map.centerAndZoom(point, 16); 
+	map.enableScrollWheelZoom();   
+	map.setCurrentCity("上海"); 
+	function chengeInfo(e){
+		document.getElementById("mapJD").innerHTML="经度:"+e.point.lng;
+		document.getElementById("mapWD").innerHTML="维度:"+e.point.lat;
+	}
+	map.addEventListener("click", chengeInfo);
   },
 
   render() {
     return (
       <div >
-		<script type="text/jsx" src="js/base.min.js"></script>
-		<script type="text/jsx" src="js/address_all.js"></script>
-		<script type="text/jsx" src="js/checkout.min.js"></script>
       	<div className="shortcut_v2013 alink_v2013">
         	<div className="w">
 	            <ul className="fl 1h">
@@ -240,7 +288,9 @@
 		                        </div>
 		                        <div className="xm-edit-addr-backdrop" id="J_editAddrBackdrop">
 		                        </div>
-		                    </div>              
+		                    </div>   
+		                    <div id="selectContainer" className="selectContainer"></div>      
+		                    <div><h3 id="mapJD">经度</h3><h3 id="mapWD">维度</h3></div>    
 		                </div>
 
 		                <div id="checkoutPayment">
@@ -262,16 +312,24 @@
 		                    </div>
 		                    <div className="xm-box">
 		                        <div className="box-hd ">
-		                            <h2 className="title">配送方式</h2>
+		                            <h2 className="title">配送选择</h2>
 		                        </div>
 		                        <div className="box-bd">
 		                            <ul className="checkout-option-list clearfix J_optionList">
 		                                <li id="ship1" className="item selected" onClick={this._ChangeShip} value="1">
-		                                    快递配送
+		                                    myCart0
 		                                </li>
 
 		                                <li id="ship2" className="item " onClick={this._ChangeShip} value="2">
-		                                        机器人配送
+		                                     myCart1
+		                                </li> 
+
+		                                <li id="ship3" className="item " onClick={this._ChangeShip} value="3">
+		                                     myCart2
+		                                </li> 
+
+		                                <li id="ship4" className="item " onClick={this._ChangeShip} value="4">
+		                                     myCart3
 		                                </li> 
 		                            </ul>
 		                        </div>
@@ -394,8 +452,10 @@
 		                <input type="hidden"  id="couponType" name="Checkout[couponsType]" />
 		                <input type="hidden" id="couponValue" name="Checkout[couponsValue]" />
 		                <div className="checkout-confirm">
+
 		                     <a href="#" className="btn btn-lineDakeLight btn-back-cart">返回购物车</a>
-		                     <input type="submit" className="btn btn-primary" value="立即下单" id="checkoutToPay" />
+
+		                     <input type="submit" className="btn btn-primary" value="立即下单" id="checkoutToPay" onClick={this._toOrder}/>
 		                </div>
 		            </div>
 		        </form>

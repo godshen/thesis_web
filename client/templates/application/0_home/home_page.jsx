@@ -5,20 +5,19 @@ HomePage = React.createClass({
   // Loads items from the Devices collection and puts them on this.data.devices
   getMeteorData() {
     return {
-      devicesCount: Devices.find({}).count(),
-      devicesOnlineCount: Devices.find({online:'1'}).count(),
+      devicesCount: Devices.find({}).count()
     };
   },
 
   _renderOverview() {
   	var overviews = [
-  		{text: '购物数量', href: 'monitor_solo'},
-  		{text: '总金额', href: 'monitor_solo'},
-  		{text: '剩余配送', href: 'repair_status'},
+  		{text: '配送车数量', href: 'monitor_solo'},
+  		{text: '消费总金额', href: 'monitor_solo'},
+  		{text: '剩余配送量', href: 'repair_status'},
   		{text: '用户消息', href: 'message_user'}
   	];
   	return overviews.map((item) => {
-      return <OverviewItem key={item.text} item={item} devicesCount={this.data.devicesCount} devicesOnlineCount={this.data.devicesOnlineCount} changePage={this.props.changePage} />;
+      return <OverviewItem key={item.text} item={item} devicesCount={this.data.devicesCount} changePage={this.props.changePage} />;
     });
   },
 
@@ -53,7 +52,7 @@ OverviewItem = React.createClass({
 
   render() {
   	switch (this.props.item.text) {
-  		case '购物数量':
+  		case '配送车数量':
   			return (
 				<div className="col-md-3">
 					<a href="javascript:;" style={{backgroundColor:'#24B6FF'}} onClick={this._changePage}>{this.props.item.text} : {this.props.devicesCount}</a>
@@ -61,15 +60,15 @@ OverviewItem = React.createClass({
 		    );
 		    break;
 
-  		case '总金额':
+  		case '消费总金额':
   			return (
 				<div className="col-md-3">
-					<a href="javascript:;" style={{backgroundColor:'#37CB8F'}} onClick={this._changePage}>{this.props.item.text} : {this.props.devicesOnlineCount}</a>
+					<a href="javascript:;" style={{backgroundColor:'#37CB8F'}} onClick={this._changePage}>{this.props.item.text} : 32768</a>
 				</div>
 		    );
 		    break;
 
-  		case '剩余配送':
+  		case '剩余配送量':
   			return (
 				<div className="col-md-3">
 					<a href="javascript:;" style={{backgroundColor:'#FE895E'}} onClick={this._changePage}>{this.props.item.text} : 2</a>

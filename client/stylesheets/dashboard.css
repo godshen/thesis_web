@@ -202,7 +202,12 @@ ul.nav-justified {
 }
 
 .mapContainer{
-  width :500px;
+  padding: 400px 0px 0px 150px;
+  width :900px;
   height: 500px;
 }
 
+.selectContainer{
+  width :500px;
+  height: 200px;
+}

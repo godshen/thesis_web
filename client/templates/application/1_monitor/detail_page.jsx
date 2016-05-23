@@ -2,12 +2,12 @@ DetailPage = React.createClass({
   // This mixin makes the getMeteorData method work
   mixins: [ReactMeteorData],
 
-  // Loads items from the Devices collection and puts them on this.data.weather
+  // Loads items from the Devices collection and puts them on
   getMeteorData() {
-    let query = this.props.currentDevice.location;
-
+    let query = this.props.currentDevice.id;
     return {
-      weather: Weathers.findOne(query)
+      myDev: Devices.findOne(query),
+      myOrd: Orders.findOne({"cart":query})
     };
   },
 
@@ -27,12 +27,19 @@ DetailPage = React.createClass({
   },
 
   _onMessageArrived(message) {
-    var msg = JSON.parse(message.payloadString);
-    msg = msg[0];
-    if(msg[15]) console.log(msg[15]);
-    if(msg[17]) {console.log(msg[17]);document.getElementById("temp_test").innerHTML="温度"+msg[17];}
-    if(msg[19]) {console.log(msg[19]);document.getElementById("humi_test").innerHTML="湿度"+msg[19];}
+    var messageStr = message.payloadString;
+    
+    console.log(messageStr);
 
+    this._mqttSend("hahaha")
+  },
+
+  _mqttSend(msg) {
+    var client = this.mqttClient;
+    var device_id = this.props.currentDevice.id;
+    message = new Paho.MQTT.Message(msg);
+    message.destinationName = device_id + "/in";
+    client.send(message);
   },
 
   componentDidMount() {
@@ -41,10 +48,40 @@ DetailPage = React.createClass({
     var device_id = this.props.currentDevice.id;
     client.connect({onSuccess:onConnect});
     function onConnect() {
-        // Once a connection has been made, make a subscription and send a message.
         console.log("connected: "+device_id);
-        client.subscribe(device_id + "/out");
+        client.subscribe(device_id + "/out"); 
     };
+
+    var map = new BMap.Map("mapContainer");
+    var point = new BMap.Point(121.222, 31.058);
+    map.centerAndZoom(point, 16); 
+    map.addControl(new BMap.NavigationControl()); 
+    map.addControl(new BMap.ScaleControl());
+    map.enableScrollWheelZoom();   
+    map.setCurrentCity("上海"); 
+
+    var myIcon = new BMap.Icon(
+      "img/cart.jpg", 
+      new BMap.Size(23, 25), {
+        offset: new BMap.Size(10, 25) 
+      }
+    );  
+    var nowDev = this.data.myDev;
+    var nowDes = this.data.myOrd;
+    var pot_0 = new BMap.Point(nowDev.coordinates0, nowDev.coordinates1);
+    var marker0 = new BMap.Marker(pot_0,{icon: myIcon});
+    map.addOverlay(marker0);
+    if(nowDes!=null){
+      var pot_1 = new BMap.Point(nowDes.lng,nowDes.lat);
+      var marker1 = new BMap.Marker(pot_1);
+      map.addOverlay(marker1);
+
+      var walking = new BMap.WalkingRoute(
+            map, {renderOptions:{map: map, panel: "r-result",autoViewport: true}}
+          );
+      walking.search(pot_0,pot_1);
+    }
+    
   },
 
   componentWillUnmount() {
@@ -64,6 +101,9 @@ DetailPage = React.createClass({
 
         <div id="humi_test">{"Nan"} </div>
 
+        <div id="mapContainer" className="mapContainer"></div>
+
+        <div id="r-result"></div>
       </div>
     );
   }
