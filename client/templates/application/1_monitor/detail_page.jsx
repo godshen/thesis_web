@@ -7,7 +7,9 @@ DetailPage = React.createClass({
     let query = this.props.currentDevice.id;
     return {
       myDev: Devices.findOne(query),
-      myOrd: Orders.findOne({"cart":query})
+      myOrd: Orders.findOne({"cart":query}),
+      map : 0,
+      marker : 0
     };
   },
 
@@ -28,10 +30,34 @@ DetailPage = React.createClass({
 
   _onMessageArrived(message) {
     var messageStr = message.payloadString;
-    
-    console.log(messageStr);
+    var messageObj = JSON.parse(messageStr);
+    var lat = messageObj.lat;
+    var lng = messageObj.lng;
+    var latS = lat.toString();
+    var lngS = lng.toString();
 
-    this._mqttSend("hahaha")
+    var Lat = parseFloat(latS.substring(0,3)) + 
+              parseFloat(latS.substring(3)/60.0) + 0.0109;
+    var Lng = parseFloat(lngS.substring(0,2)) + 
+              parseFloat(lngS.substring(2)/60.0) + 0.0043;
+    var map = this.data.map;
+    var marker = this.data.marker;  
+    marker.remove();
+    console.log(Lat+" , "+Lng);
+    var myIcon = new BMap.Icon(
+      "img/cart.jpg", 
+      new BMap.Size(23, 25), {
+        offset: new BMap.Size(10, 25) 
+      }
+    );  
+    var pot_0 = new BMap.Point(Lat,Lng);
+    var marker0 = new BMap.Marker(pot_0,{icon: myIcon});
+    var label = new BMap.Label("myCart",{offset:new BMap.Size(20,-10)});
+    map.addOverlay(marker0);
+    marker0.setLabel(label);
+
+    this.data.marker = marker0;
+    //this._mqttSend("")
   },
 
   _mqttSend(msg) {
@@ -41,8 +67,15 @@ DetailPage = React.createClass({
     message.destinationName = device_id + "/in";
     client.send(message);
   },
+  _toCon(e){
+    var content = e.target.value;
+    if(content=="左"){this._mqttSend("TurnR");} 
+    if(content=="右"){this._mqttSend("TurnL");} 
+    if(content=="停"){this._mqttSend("Stop");} 
+  },
 
   componentDidMount() {
+    this.data.map = new BMap.Map("mapContainer");
     this._mqttClient();
     var client = this.mqttClient;
     var device_id = this.props.currentDevice.id;
@@ -52,7 +85,7 @@ DetailPage = React.createClass({
         client.subscribe(device_id + "/out"); 
     };
 
-    var map = new BMap.Map("mapContainer");
+    var map = this.data.map;
     var point = new BMap.Point(121.222, 31.058);
     map.centerAndZoom(point, 16); 
     map.addControl(new BMap.NavigationControl()); 
@@ -68,9 +101,13 @@ DetailPage = React.createClass({
     );  
     var nowDev = this.data.myDev;
     var nowDes = this.data.myOrd;
+
     var pot_0 = new BMap.Point(nowDev.coordinates0, nowDev.coordinates1);
     var marker0 = new BMap.Marker(pot_0,{icon: myIcon});
+    var label = new BMap.Label("myCart",{offset:new BMap.Size(20,-10)});
     map.addOverlay(marker0);
+    marker0.setLabel(label);
+    this.data.marker = marker0;
     if(nowDes!=null){
       var pot_1 = new BMap.Point(nowDes.lng,nowDes.lat);
       var marker1 = new BMap.Marker(pot_1);
@@ -102,7 +139,11 @@ DetailPage = React.createClass({
         <div id="humi_test">{"Nan"} </div>
 
         <div id="mapContainer" className="mapContainer"></div>
+        <input className="btn btn-primary" value="左" onClick={this._toCon}/>
 
+        <input className="btn btn-primary" value="右" onClick={this._toCon}/>
+
+        <input className="btn btn-primary" value="停" onClick={this._toCon}/>
         <div id="r-result"></div>
       </div>
     );

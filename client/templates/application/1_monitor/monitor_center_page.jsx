@@ -20,6 +20,33 @@
     }
   },
 
+  _mqttSend(msg) {
+
+    var host = "api.easylink.io";
+    var port = 1983;
+    var clientID = "v1-app-" + parseInt(Math.random() * (1000000000000), 12);
+    var client = new Paho.MQTT.Client(host, Number(port), clientID);
+
+	var cartBuff =[
+	  	"c28a7d8b/d0bae4064b24",
+	  	"c28a7d8b/abcdwxyz0123",
+	  	"c28a7d8b/abcdwxyz0124",
+	  	"c28a7d8b/abcdwxyz0125"
+		];
+
+    var device_id = cartBuff[this.state.shipment_id-1];
+    var message = new Paho.MQTT.Message(msg);
+    message.destinationName = device_id + "/in";
+    
+
+    client.connect({onSuccess:onConnect});
+    function onConnect() {
+        console.log("connected");
+        client.send(message);
+    };
+
+  },
+
   _ChangeTime(e){
   	var now = this.state.best_time;
   	document.getElementById("time"+now).style['border-color']='#fff';
@@ -83,7 +110,7 @@
   	var lat = document.getElementById("mapWD").innerText.split(':');
   	if(lng.length==2 && lat.length==2){
   		var testOrder = {"cart":"","lng":0,"lat":0};
-  		testOrder.cart = cartBuff[this.state.shipment_id];
+  		testOrder.cart = cartBuff[this.state.shipment_id-1];
 	  	testOrder.lng = parseFloat(lng[1]);
 	  	testOrder.lat = parseFloat(lat[1]);
 	  	testOrder._id = "xxx4321_"+this.state.shipment_id;
@@ -93,6 +120,7 @@
 		} else {
 			Orders.insert(testOrder);
 		}
+		this._mqttSend("GO");
   	}
   	else{
   		alert("请选择地址");
@@ -455,7 +483,7 @@
 
 		                     <a href="#" className="btn btn-lineDakeLight btn-back-cart">返回购物车</a>
 
-		                     <input type="submit" className="btn btn-primary" value="立即下单" id="checkoutToPay" onClick={this._toOrder}/>
+		                     <input type="" className="btn btn-primary" value="立即下单" id="checkoutToPay" onClick={this._toOrder}/>
 		                </div>
 		            </div>
 		        </form>
