@@ -56,6 +56,10 @@ if (Meteor.isServer) {
 				}
 			}
 		);
+		Orders.remove("xxx4321_1");
+		Orders.remove("xxx4321_2");
+		Orders.remove("xxx4321_3");
+		Orders.remove("xxx4321_4");
 	};
 
 	fetchDevices();

@@ -9,7 +9,8 @@ DetailPage = React.createClass({
       myDev: Devices.findOne(query),
       myOrd: Orders.findOne({"cart":query}),
       map : 0,
-      marker : 0
+      marker : 0,
+      RuteRes : []
     };
   },
 
@@ -114,9 +115,27 @@ DetailPage = React.createClass({
       map.addOverlay(marker1);
 
       var walking = new BMap.WalkingRoute(
-            map, {renderOptions:{map: map, panel: "r-result",autoViewport: true}}
+            map, {renderOptions:{map: map,autoViewport: true}}
           );
       walking.search(pot_0,pot_1);
+
+      walking.setSearchCompleteCallback(
+        function(){
+          var res = walking.getResults();
+          var len = res.getPlan(0).getRoute(0).Nr.length;
+
+          var r = res.getPlan(0).getRoute(0).getStep(0).getDescription(false);
+          console.log(r.match("正东|正西|正南|正北|东北|东南|西北|西南"));
+
+          for(var i=1;i<len-1;i++)
+          {
+            var r = res.getPlan(0).getRoute(0).getStep(i).getDescription(false);
+            console.log(r.match("左转|右转"));
+            //this.data.RuteRes[i] = r;
+          }
+
+        }
+      );
     }
     
   },

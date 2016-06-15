@@ -345,19 +345,19 @@
 		                        <div className="box-bd">
 		                            <ul className="checkout-option-list clearfix J_optionList">
 		                                <li id="ship1" className="item selected" onClick={this._ChangeShip} value="1">
-		                                    myCart0
+		                                    myCart1
 		                                </li>
 
 		                                <li id="ship2" className="item " onClick={this._ChangeShip} value="2">
-		                                     myCart1
-		                                </li> 
-
-		                                <li id="ship3" className="item " onClick={this._ChangeShip} value="3">
 		                                     myCart2
 		                                </li> 
 
-		                                <li id="ship4" className="item " onClick={this._ChangeShip} value="4">
+		                                <li id="ship3" className="item " onClick={this._ChangeShip} value="3">
 		                                     myCart3
+		                                </li> 
+
+		                                <li id="ship4" className="item " onClick={this._ChangeShip} value="4">
+		                                     myCart4
 		                                </li> 
 		                            </ul>
 		                        </div>
